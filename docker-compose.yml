@@ -1,0 +1,13 @@
+services:
+
+  server:
+    build: ./
+
+  db:
+    image: postgres:18-alpine
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: 1234567890
+      POSTGRES_DB: images_hosting
+      POSTGRES_USER: images_user
