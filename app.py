@@ -16,6 +16,23 @@ def insert_image_metadata(
                     "INSERT INTO images (filename, original_name,size,file_type) VALUES (%s, %s, %s, %s) RETURNING id;"
                     [filename, original_name, size, file_type]
                 )
+                return cursor.fetchone()
+
+def get_images_metadata(connection: Connection, page=1):
+    offset = 10 * (page - 1)
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT * FROM images OFFSET %s LIMIT 10;",
+            [offset]
+        )
+        return cursor.fetchall()
+
+def delete_images_metadata(connection: Connection, id: int):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "DELETE FROM images WHERE id = %s;",
+            [id]
+        )
 
 connection = None
 while not connection:
