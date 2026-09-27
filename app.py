@@ -57,3 +57,6 @@ with connection.cursor() as cursor:
     )
 
 print("Connected")
+print(insert_image_metadata(connection, "file1", "PHOTO01", 233, "ipg"))
+print(insert_image_metadata(connection, "file2", "PHOTO02", 443, "ipg"))
+print(insert_image_metadata(connection, "file3", "PHOTO03", 761, "ipg"))
