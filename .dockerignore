@@ -1,6 +1,8 @@
-,venv
+.venv
 .gitignore
+../static
+.DS_Store
 Dockerfile
 venv
 README.md
-
+static
