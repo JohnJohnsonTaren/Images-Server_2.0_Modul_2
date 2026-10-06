@@ -1,7 +1,32 @@
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: image_uploader_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./images:/images:z
+      - ./logs:/logs:z
+    networks:
+      - image-network
+    restart: unless-stopped
 
-  server:
-    build: ./
+  nginx:
+    image: nginx:alpine
+    container_name: image_uploader_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./images:/images:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./static:/usr/share/nginx/html/static:ro
+    depends_on:
+      - app
+    networks:
+      - image-network
+    restart: unless-stopped
 
   db:
     image: postgres:18-alpine
@@ -11,3 +36,14 @@ services:
       POSTGRES_PASSWORD: 1234567890
       POSTGRES_DB: images_hosting
       POSTGRES_USER: images_user
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      - image-network
+
+volumes:
+  pgdata:
+
+networks:
+  image-network:
+    driver: bridge
